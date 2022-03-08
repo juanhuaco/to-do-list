@@ -26,8 +26,28 @@ export default class View {
         const { type, words } = filters;
         const [, ...rows] = document.getElementsByTagName('tr');
         for(const row of rows){
-            console.log(row);
+            const [title, description, completed] = row.children;
+            let shouldHide = false;
+
+            if(words){
+                shouldHide = !title.innerText.includes(words) && !description.innerText.includes(words); 
+            }
+
+            const shouldBeCompleted = type === 'completed';
+            const isCompleted = completed.children[0].checked;
+
+            if(type !== 'all' && shouldBeCompleted !== isCompleted){
+                shouldHide = true;
+            }
+
+            if(shouldHide){
+                row.classList.toggle('d-none', true);
+            }else{
+                row.classList.toggle('d-none', false);
+            }
         }
+
+
     }
 
     setModel(model){
